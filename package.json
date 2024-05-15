@@ -5,8 +5,8 @@
     "license": "MIT",
     "scripts": {
         "build": "tsc",
-        "dev": "concurrently \"tsc --watch\" \"nodemon ./dist/src/server.js\"",
-        "start": "node dist/src/server.js",
+        "start:dev": "concurrently \"tsc --watch\" \"nodemon ./dist/src/server.js\"",
+        "start:prod": "yarn build && node dist/src/server.js",
         "lint": "eslint src --ignore-path .eslintignore --ext .ts",
         "lint:fix": "npx eslint src --fix",
         "prettier": "prettier --ignore-path .gitignore --write \"./src/**/*.+(js|ts|json)\"",
