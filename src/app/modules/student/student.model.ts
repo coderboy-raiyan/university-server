@@ -72,6 +72,7 @@ const studentSchema = new mongoose.Schema<Student>({
         required: true,
     },
     gender: {
+        type: String,
         enum: ['male', 'female'],
     },
     dateOfBirth: {
@@ -86,7 +87,9 @@ const studentSchema = new mongoose.Schema<Student>({
         required: true,
     },
     bloodGroup: {
+        type: String,
         enum: ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'],
+        required: true,
     },
     presentAddress: {
         type: String,
@@ -102,10 +105,11 @@ const studentSchema = new mongoose.Schema<Student>({
         type: String,
     },
     isActive: {
-        enum: ['active', 'block'],
+        type: String,
+        enum: ['active', 'blocked'],
     },
 });
 
-const Student = mongoose.model<Student>('Student', studentSchema);
+const StudentModel = mongoose.model<Student>('Student', studentSchema);
 
-export default Student;
+export default StudentModel;
