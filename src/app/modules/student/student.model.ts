@@ -24,13 +24,16 @@ const studentUserNameSchema = new mongoose.Schema<UserName>({
     firstName: {
         type: String,
         required: true,
+        trim: true,
     },
     lastName: {
         type: String,
         required: true,
+        trim: true,
     },
     middleName: {
         type: String,
+        trim: true,
     },
 });
 const guardianSchema = new mongoose.Schema<Guardian>({
@@ -62,18 +65,26 @@ const studentSchema = new mongoose.Schema<Student>({
     id: {
         type: String,
         required: true,
+        unique: true,
     },
     avatar: {
         type: String,
     },
-    name: studentUserNameSchema,
+    name: {
+        type: studentUserNameSchema,
+        required: true,
+    },
     email: {
         type: String,
         required: true,
+        unique: true,
     },
     gender: {
         type: String,
-        enum: ['male', 'female'],
+        enum: {
+            values: ['male', 'female'],
+            message: '{VALUE} is not valid. Gender must be male or female',
+        },
     },
     dateOfBirth: {
         type: String,
@@ -88,7 +99,9 @@ const studentSchema = new mongoose.Schema<Student>({
     },
     bloodGroup: {
         type: String,
-        enum: ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'],
+        enum: {
+            values: ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'],
+        },
         required: true,
     },
     presentAddress: {
@@ -99,14 +112,21 @@ const studentSchema = new mongoose.Schema<Student>({
         type: String,
         required: true,
     },
-    guardian: guardianSchema,
-    localGuardian: localGuardianSchema,
+    guardian: {
+        type: guardianSchema,
+        required: true,
+    },
+    localGuardian: {
+        type: localGuardianSchema,
+        required: true,
+    },
     profileImg: {
         type: String,
     },
     isActive: {
         type: String,
         enum: ['active', 'blocked'],
+        default: 'active',
     },
 });
 
