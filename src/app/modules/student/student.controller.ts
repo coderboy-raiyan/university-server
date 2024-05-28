@@ -1,11 +1,10 @@
-import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { TStudent } from './student.interface';
 import { StudentServices } from './student.service';
 
-const getAllStudents = catchAsync(async (req: Request, res: Response) => {
+const getAllStudents = catchAsync(async (req, res) => {
     const result = await StudentServices.getAllStudentsFromDB();
     return sendResponse<TStudent[]>(res, {
         statusCode: httpStatus.OK,
@@ -15,7 +14,7 @@ const getAllStudents = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-const getSingleStudent = catchAsync(async (req: Request, res: Response) => {
+const getSingleStudent = catchAsync(async (req, res) => {
     const { id: studentId } = req.params;
     const result = await StudentServices.getSingleStudentsFromDB(studentId);
     return sendResponse<TStudent>(res, {

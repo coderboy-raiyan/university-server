@@ -21,7 +21,7 @@ const localGuardianValidationSchema = z.object({
     address: z.string(),
 });
 
-const studentValidationSchema = z.object({
+const createStudentValidationSchema = z.object({
     name: studentUserNameValidationSchema,
     email: z.string().email(),
     gender: z.enum(StudentConstant.Gender),
@@ -35,7 +35,7 @@ const studentValidationSchema = z.object({
 });
 
 const StudentValidation = {
-    studentValidationSchema,
+    createStudentValidationSchema,
 };
 
 export default StudentValidation;

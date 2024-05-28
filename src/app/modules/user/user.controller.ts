@@ -1,11 +1,10 @@
-import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { TStudent } from '../student/student.interface';
 import UserService from './user.service';
 
-const createStudent = catchAsync(async (req: Request, res: Response) => {
+const createStudent = catchAsync(async (req, res) => {
     const { password, student } = req.body;
     const result = await UserService.createStudentToDB(password, student);
 
