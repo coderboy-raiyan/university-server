@@ -1,33 +1,43 @@
 import { TAcademicSemester } from '../academicSemester/academicSemester.interface';
 import User from './user.model';
 
-const findLatestStudentId = async (payload: TAcademicSemester): Promise<string | null> => {
+const findLatestStudentId = async (): Promise<string | null> => {
     const isStudentExists = await User.findOne({ role: 'student' }, { _id: 0, id: 1 })
         .sort({ createdAt: -1 })
         .lean();
 
     if (isStudentExists) {
-        return isStudentExists.id.substring(payload.year.length + payload.code.length);
+        return isStudentExists.id;
     } else {
         return null;
     }
 };
 
 const generateStudentId = async (payload: TAcademicSemester): Promise<string> => {
-    const currentId = (0).toString().padStart(4, '0');
-    let incrementalId: string;
+    let currentId = (0).toString().padStart(4, '0');
+    currentId = (parseInt(currentId) + 1).toString().padStart(4, '0');
 
-    const latestStudentId = await findLatestStudentId(payload);
+    const latestStudentId = await findLatestStudentId();
 
     if (latestStudentId) {
-        incrementalId = String(Number(latestStudentId) + 1).padStart(4, '0');
-    } else {
-        incrementalId = String(Number(currentId) + 1).padStart(4, '0');
+        const lastStudentYear = latestStudentId.substring(0, payload.year.length); // 2024
+        const lastStudentCode = latestStudentId.substring(
+            lastStudentYear.length,
+            lastStudentYear.length + payload.code.length
+        ); // 01
+
+        if (lastStudentYear === payload.year && lastStudentCode === payload.code) {
+            currentId = (
+                parseInt(latestStudentId.substring(payload.year.length + payload.code.length)) + 1
+            )
+                .toString()
+                .padStart(4, '0');
+        }
     }
 
-    incrementalId = `${payload.year}${payload.code}${incrementalId}`;
+    currentId = `${payload.year}${payload.code}${currentId}`;
 
-    return incrementalId;
+    return currentId;
 };
 
 const UserUtils = {
