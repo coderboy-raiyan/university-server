@@ -35,7 +35,10 @@ const academicSemesterSchema = new Schema<TAcademicSemester, TAcademicModel>(
 academicSemesterSchema.static(
     'isSemesterExistsInTheSameYear',
     async function (payload: TAcademicSemester) {
-        const isSemesterExists = await this.findOne({ year: payload.year, name: payload.name });
+        const isSemesterExists = await AcademicSemester.findOne({
+            year: payload.year,
+            name: payload.name,
+        });
         return isSemesterExists;
     }
 );

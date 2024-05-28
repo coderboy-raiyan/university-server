@@ -14,7 +14,8 @@ const createAcademicSemesterToDB = async (
             `Semester '${semester.name}' didn't match with code ${semester.code}. Did you mean code ${AcademicSemesterConstant.SemesterAndCodeMapper[semester.name]}`
         );
     }
-    const isSemesterExistsWithSameYear = AcademicSemester.isSemesterExistsInTheSameYear(semester);
+    const isSemesterExistsWithSameYear =
+        await AcademicSemester.isSemesterExistsInTheSameYear(semester);
 
     if (isSemesterExistsWithSameYear) {
         throw new ApiError(
@@ -52,7 +53,7 @@ const updateAcademicSemesterToDB = async (
 ): Promise<TAcademicSemester> => {
     if (payload.code && payload.name) {
         const isSemesterExistsWithSameYear =
-            AcademicSemester.isSemesterExistsInTheSameYear(payload);
+            await AcademicSemester.isSemesterExistsInTheSameYear(payload);
 
         if (AcademicSemesterConstant.SemesterAndCodeMapper[payload.name] !== payload.code) {
             throw new ApiError(

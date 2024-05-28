@@ -78,6 +78,11 @@ const studentSchema = new mongoose.Schema<TStudent>(
             unique: true,
             required: true,
         },
+        admissionSemester: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'AcademicSemester',
+            required: true,
+        },
         email: {
             type: String,
             required: true,
