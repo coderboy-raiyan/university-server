@@ -67,9 +67,6 @@ const studentSchema = new mongoose.Schema<Student>({
         required: true,
         unique: true,
     },
-    avatar: {
-        type: String,
-    },
     name: {
         type: studentUserNameSchema,
         required: true,
@@ -88,22 +85,14 @@ const studentSchema = new mongoose.Schema<Student>({
     },
     dateOfBirth: {
         type: String,
-    },
-    contactNumber: {
-        type: String,
         required: true,
     },
+
     emergencyContactNo: {
         type: String,
         required: true,
     },
-    bloodGroup: {
-        type: String,
-        enum: {
-            values: ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'],
-        },
-        required: true,
-    },
+
     presentAddress: {
         type: String,
         required: true,
@@ -123,10 +112,9 @@ const studentSchema = new mongoose.Schema<Student>({
     profileImg: {
         type: String,
     },
-    isActive: {
-        type: String,
-        enum: ['active', 'blocked'],
-        default: 'active',
+    isDeleted: {
+        type: Boolean,
+        default: false,
     },
 });
 
