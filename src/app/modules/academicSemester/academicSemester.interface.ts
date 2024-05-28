@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+import { Model } from 'mongoose';
+
 export type TMonth =
     | 'January'
     | 'February'
@@ -25,4 +28,8 @@ export type TAcademicSemester = {
     year: string;
     startMonth: TMonth;
     endMonth: TMonth;
+};
+
+export type TAcademicModel = Model<TAcademicSemester> & {
+    isSemesterExistsInTheSameYear(payload: TAcademicSemester): TAcademicSemester | null;
 };

@@ -1,10 +1,8 @@
-import httpStatus from 'http-status';
 import { Schema, model } from 'mongoose';
-import ApiError from '../../errors/ApiError';
 import AcademicSemesterConstant from './academicSemester.constant';
-import { TAcademicSemester } from './academicSemester.interface';
+import { TAcademicModel, TAcademicSemester } from './academicSemester.interface';
 
-const academicSemesterSchema = new Schema<TAcademicSemester>(
+const academicSemesterSchema = new Schema<TAcademicSemester, TAcademicModel>(
     {
         name: {
             type: String,
@@ -34,17 +32,17 @@ const academicSemesterSchema = new Schema<TAcademicSemester>(
     { timestamps: true }
 );
 
-academicSemesterSchema.pre('save', async function (next) {
-    const isSemesterExists = await AcademicSemester.findOne({ year: this.year, name: this.name });
-    if (isSemesterExists) {
-        throw new ApiError(
-            httpStatus.NOT_ACCEPTABLE,
-            `Semester '${this.name}' already exists in '${this.year}'`
-        );
+academicSemesterSchema.static(
+    'isSemesterExistsInTheSameYear',
+    async function (payload: TAcademicSemester) {
+        const isSemesterExists = await this.findOne({ year: payload.year, name: payload.name });
+        return isSemesterExists;
     }
-    next();
-});
+);
 
-const AcademicSemester = model<TAcademicSemester>('AcademicSemester', academicSemesterSchema);
+const AcademicSemester = model<TAcademicSemester, TAcademicModel>(
+    'AcademicSemester',
+    academicSemesterSchema
+);
 
 export default AcademicSemester;
