@@ -1,6 +1,9 @@
 import express, { Application } from 'express';
 import httpStatus from 'http-status';
-import router from './router';
+import globalErrorHandler from './app/middlewares/globalErrorHandler';
+import notFound from './app/middlewares/notFound';
+import router from './app/routes';
+
 const app: Application = express();
 
 app.use(express.json());
@@ -11,5 +14,11 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/v1', router);
+
+// not found
+app.use(notFound);
+
+// globalErrorHandler
+app.use(globalErrorHandler);
 
 export default app;

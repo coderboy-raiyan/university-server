@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import { Guardian, LocalGuardian, Student, UserName } from './student.interface';
+import { TGuardian, TLocalGuardian, TStudent, TUserName } from './student.interface';
 
-const localGuardianSchema = new mongoose.Schema<LocalGuardian>({
+const localGuardianSchema = new mongoose.Schema<TLocalGuardian>({
     name: {
         type: String,
         required: true,
@@ -20,7 +20,7 @@ const localGuardianSchema = new mongoose.Schema<LocalGuardian>({
     },
 });
 
-const studentUserNameSchema = new mongoose.Schema<UserName>({
+const studentUserNameSchema = new mongoose.Schema<TUserName>({
     firstName: {
         type: String,
         required: true,
@@ -36,7 +36,7 @@ const studentUserNameSchema = new mongoose.Schema<UserName>({
         trim: true,
     },
 });
-const guardianSchema = new mongoose.Schema<Guardian>({
+const guardianSchema = new mongoose.Schema<TGuardian>({
     fatherName: {
         type: String,
         required: true,
@@ -61,63 +61,72 @@ const guardianSchema = new mongoose.Schema<Guardian>({
     },
 });
 
-const studentSchema = new mongoose.Schema<Student>({
-    id: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    name: {
-        type: studentUserNameSchema,
-        required: true,
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    gender: {
-        type: String,
-        enum: {
-            values: ['male', 'female'],
-            message: '{VALUE} is not valid. Gender must be male or female',
+const studentSchema = new mongoose.Schema<TStudent>(
+    {
+        id: {
+            type: String,
+            required: true,
+            unique: true,
+        },
+        name: {
+            type: studentUserNameSchema,
+            required: true,
+        },
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            unique: true,
+            required: true,
+        },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+        },
+        gender: {
+            type: String,
+            enum: {
+                values: ['male', 'female'],
+                message: '{VALUE} is not valid. Gender must be male or female',
+            },
+        },
+        dateOfBirth: {
+            type: String,
+            required: true,
+        },
+
+        emergencyContactNo: {
+            type: String,
+            required: true,
+        },
+
+        presentAddress: {
+            type: String,
+            required: true,
+        },
+        permanentAddress: {
+            type: String,
+            required: true,
+        },
+        guardian: {
+            type: guardianSchema,
+            required: true,
+        },
+        localGuardian: {
+            type: localGuardianSchema,
+            required: true,
+        },
+        profileImg: {
+            type: String,
+        },
+        isDeleted: {
+            type: Boolean,
+            default: false,
         },
     },
-    dateOfBirth: {
-        type: String,
-        required: true,
-    },
+    { timestamps: true }
+);
 
-    emergencyContactNo: {
-        type: String,
-        required: true,
-    },
+const Student = mongoose.model<TStudent>('Student', studentSchema);
 
-    presentAddress: {
-        type: String,
-        required: true,
-    },
-    permanentAddress: {
-        type: String,
-        required: true,
-    },
-    guardian: {
-        type: guardianSchema,
-        required: true,
-    },
-    localGuardian: {
-        type: localGuardianSchema,
-        required: true,
-    },
-    profileImg: {
-        type: String,
-    },
-    isDeleted: {
-        type: Boolean,
-        default: false,
-    },
-});
-
-const StudentModel = mongoose.model<Student>('Student', studentSchema);
-
-export default StudentModel;
+export default Student;

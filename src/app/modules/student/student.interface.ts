@@ -1,11 +1,11 @@
 import { Types } from 'mongoose';
 
-export type UserName = {
+export type TUserName = {
     firstName: string;
     middleName?: string;
     lastName: string;
 };
-export type Guardian = {
+export type TGuardian = {
     fatherName: string;
     fatherOccupation?: string;
     fatherContactNo: string;
@@ -14,17 +14,17 @@ export type Guardian = {
     motherOccupation?: string;
 };
 
-export type LocalGuardian = {
+export type TLocalGuardian = {
     name: string;
     occupation: string;
     contactNo: string;
     address: string;
 };
 
-export type Student = {
+export type TStudent = {
     id: string;
     user: Types.ObjectId;
-    name: UserName;
+    name: TUserName;
     email: string;
     gender: 'male' | 'female';
     dateOfBirth: string;
@@ -32,8 +32,8 @@ export type Student = {
     emergencyContactNo: string;
     presentAddress: string;
     permanentAddress: string;
-    guardian: Guardian;
-    localGuardian: LocalGuardian;
+    guardian: TGuardian;
+    localGuardian: TLocalGuardian;
     profileImg?: string;
     isDeleted?: boolean;
 };
