@@ -1,7 +1,13 @@
+import httpStatus from 'http-status';
+import ApiError from '../../errors/ApiError';
 import { TAcademicDepartment } from './academicDepartment.interface';
 import AcademicDepartment from './academicDepartment.model';
 
 const createAcademicDepartmentFromDB = async (payload: TAcademicDepartment) => {
+    const isDepartmentExists = await AcademicDepartment.isDepartmentAlreadyExists(payload);
+    if (isDepartmentExists) {
+        throw new ApiError(httpStatus.NOT_ACCEPTABLE, `${payload.name} department already exists!`);
+    }
     const result = await AcademicDepartment.create(payload);
     return result;
 };
@@ -15,7 +21,11 @@ const getSingleAcademicDepartmentFromDB = async (id: string) => {
 };
 
 const updateAcademicDepartmentToDB = async (id: string, payload: TAcademicDepartment) => {
-    const result = await AcademicDepartment.findByIdAndUpdate(id, payload, { new: true });
+    const isDepartmentExists = await AcademicDepartment.isDepartmentAlreadyExists(payload);
+    if (isDepartmentExists) {
+        throw new ApiError(httpStatus.NOT_ACCEPTABLE, `${payload.name} department already exists!`);
+    }
+    const result = await AcademicDepartment.findOneAndUpdate({ _id: id }, payload, { new: true });
     return result;
 };
 
