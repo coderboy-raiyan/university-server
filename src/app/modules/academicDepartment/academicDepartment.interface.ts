@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars */
 import { Model, Types } from 'mongoose';
-import ApiError from '../../errors/ApiError';
 
 export type TAcademicDepartment = {
     name: string;
-    academicFaculty: Types.ObjectId;
+    academicFaculty: Types.ObjectId | string;
 };
 
 export type TAcademicDepartmentModel = Model<TAcademicDepartment> & {
-    isDepartmentAlreadyExists(payload: TAcademicDepartment): Promise<ApiError | void>;
+    isDepartmentAlreadyExists(
+        payload: Partial<TAcademicDepartment> | { _id: string }
+    ): Promise<TAcademicDepartment | null>;
 };

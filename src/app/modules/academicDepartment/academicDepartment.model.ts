@@ -1,6 +1,4 @@
-import httpStatus from 'http-status';
 import { Schema, model } from 'mongoose';
-import ApiError from '../../errors/ApiError';
 import { TAcademicDepartment, TAcademicDepartmentModel } from './academicDepartment.interface';
 
 const academicDepartmentSchema = new Schema<TAcademicDepartment, TAcademicDepartmentModel>(
@@ -20,23 +18,11 @@ const academicDepartmentSchema = new Schema<TAcademicDepartment, TAcademicDepart
 
 academicDepartmentSchema.static(
     'isDepartmentAlreadyExists',
-    async function ({ name }: TAcademicDepartment) {
-        const isExists = await this.findOne({ name });
-        if (isExists) {
-            throw new ApiError(httpStatus.NOT_ACCEPTABLE, `${name} department already exists!`);
-        }
+    async function (payload: TAcademicDepartment) {
+        const isExists = await this.findOne(payload);
+        return isExists;
     }
 );
-
-academicDepartmentSchema.pre('findOneAndUpdate', async function (next) {
-    const query = this.getQuery();
-
-    const isExists = await this.model.findOne(query);
-    if (!isExists) {
-        throw new ApiError(httpStatus.NOT_FOUND, `Department does not exists!`);
-    }
-    next();
-});
 
 const AcademicDepartment = model<TAcademicDepartment, TAcademicDepartmentModel>(
     'AcademicDepartment',
