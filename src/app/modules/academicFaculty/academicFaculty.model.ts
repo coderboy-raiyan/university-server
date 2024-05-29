@@ -20,7 +20,7 @@ academicFacultySchema.static(
         const isExists = await this.findOne({ name });
 
         if (isExists) {
-            throw new ApiError(httpStatus.NOT_ACCEPTABLE, `${name} faculty already exists!`);
+            throw new ApiError(httpStatus.NOT_ACCEPTABLE, `${name} already exists!`);
         }
     }
 );

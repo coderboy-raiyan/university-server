@@ -27,6 +27,7 @@ const createStudentValidationSchema = z.object({
     gender: z.enum(StudentConstant.Gender),
     dateOfBirth: z.string().date(),
     admissionSemester: z.string(),
+    academicDepartment: z.string(),
     emergencyContactNo: z.string(),
     presentAddress: z.string(),
     permanentAddress: z.string(),

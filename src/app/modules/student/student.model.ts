@@ -83,6 +83,11 @@ const studentSchema = new mongoose.Schema<TStudent>(
             ref: 'AcademicSemester',
             required: true,
         },
+        academicDepartment: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'AcademicDepartment',
+            required: true,
+        },
         email: {
             type: String,
             required: true,
