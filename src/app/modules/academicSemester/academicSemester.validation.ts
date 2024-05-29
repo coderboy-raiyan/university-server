@@ -19,7 +19,7 @@ const updateAcademicSemesterValidationSchema = z.object({
             startMonth: z.enum(AcademicSemesterConstant.Months as [string, ...string[]]).optional(),
             endMonth: z.enum(AcademicSemesterConstant.Months as [string, ...string[]]).optional(),
         })
-        .refine((data) => data.code && data.name, {
+        .refine((data) => (data.code && data.name) || (!data.name && !data.code), {
             message: 'Both name and code is required',
         }),
 });
