@@ -16,14 +16,10 @@ const getAllAcademicDepartmentsFromDB = async () => {
     return result;
 };
 const getSingleAcademicDepartmentFromDB = async (id: string) => {
-    const isDepartDeletedOrNot = await AcademicDepartment.isDepartmentAlreadyExists({
-        _id: id,
-    });
-
-    if (!isDepartDeletedOrNot) {
-        throw new ApiError(httpStatus.NOT_ACCEPTABLE, `Department does not exists!`);
-    }
     const result = await AcademicDepartment.findOne({ _id: id }).populate('academicFaculty');
+    if (!result) {
+        throw new ApiError(httpStatus.NOT_FOUND, `Department does not exists!`);
+    }
     return result;
 };
 
@@ -35,15 +31,12 @@ const updateAcademicDepartmentToDB = async (id: string, payload: TAcademicDepart
         }
     }
 
-    const isDepartDeletedOrNot = await AcademicDepartment.isDepartmentAlreadyExists({
-        _id: id,
-    });
+    const result = await AcademicDepartment.findOneAndUpdate({ _id: id }, payload, { new: true });
 
-    if (!isDepartDeletedOrNot) {
-        throw new ApiError(httpStatus.NOT_ACCEPTABLE, `${payload.name}  does not exists!`);
+    if (!result) {
+        throw new ApiError(httpStatus.NOT_FOUND, `Department does not exists!`);
     }
 
-    const result = await AcademicDepartment.findOneAndUpdate({ _id: id }, payload, { new: true });
     return result;
 };
 
