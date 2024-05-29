@@ -20,22 +20,23 @@ const generateStudentId = async (payload: TAcademicSemester): Promise<string> =>
     const latestStudentId = await findLatestStudentId();
 
     if (latestStudentId) {
-        const lastStudentYear = latestStudentId.substring(0, payload.year.length); // 2024
+        const lastStudentYear = latestStudentId.substring(0, payload?.year?.length); // 2024
         const lastStudentCode = latestStudentId.substring(
             lastStudentYear.length,
-            lastStudentYear.length + payload.code.length
+            lastStudentYear.length + payload?.code?.length
         ); // 01
 
-        if (lastStudentYear === payload.year && lastStudentCode === payload.code) {
+        if (lastStudentYear === payload?.year && lastStudentCode === payload?.code) {
             currentId = (
-                parseInt(latestStudentId.substring(payload.year.length + payload.code.length)) + 1
+                parseInt(latestStudentId.substring(payload?.year?.length + payload?.code?.length)) +
+                1
             )
                 .toString()
                 .padStart(4, '0');
         }
     }
 
-    currentId = `${payload.year}${payload.code}${currentId}`;
+    currentId = `${payload?.year}${payload?.code}${currentId}`;
 
     return currentId;
 };
