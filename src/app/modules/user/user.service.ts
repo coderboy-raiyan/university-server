@@ -49,7 +49,11 @@ const createStudentToDB = async (password: string | null, payload: TStudent): Pr
     } catch (error) {
         await session.abortTransaction();
         await session.endSession();
-        throw new Error(error);
+        if (error instanceof ApiError) {
+            throw new ApiError(error.statusCode, error.message);
+        } else {
+            throw new Error(error);
+        }
     }
 };
 

@@ -1,4 +1,6 @@
+import httpStatus from 'http-status';
 import mongoose from 'mongoose';
+import ApiError from '../../errors/ApiError';
 import { TGuardian, TLocalGuardian, TStudent, TUserName } from './student.interface';
 
 const localGuardianSchema = new mongoose.Schema<TLocalGuardian>({
@@ -136,6 +138,37 @@ const studentSchema = new mongoose.Schema<TStudent>(
     },
     { timestamps: true }
 );
+
+studentSchema.pre('save', async function (next) {
+    const isStudentAlreadyExists = await Student.findOne({
+        email: this.email,
+    });
+
+    if (isStudentAlreadyExists) {
+        throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student already exists!');
+    }
+    next();
+});
+
+studentSchema.pre('find', function (next) {
+    this.find({ isDeleted: { $ne: true } });
+    next();
+});
+
+studentSchema.pre('findOne', function (next) {
+    this.find({ isDeleted: { $ne: true } });
+    next();
+});
+
+studentSchema.pre('findOneAndUpdate', async function (next) {
+    const query = this.getQuery();
+    const isExists = await this.model.findOne(query);
+
+    if (!isExists) {
+        throw new ApiError(httpStatus.NOT_FOUND, `Student is not found by this ${query.id}!`);
+    }
+    next();
+});
 
 const Student = mongoose.model<TStudent>('Student', studentSchema);
 
