@@ -22,7 +22,9 @@ academicDepartmentSchema.static(
     'isDepartmentAlreadyExists',
     async function ({ name }: TAcademicDepartment) {
         const isExists = await this.findOne({ name });
-        return isExists;
+        if (isExists) {
+            throw new ApiError(httpStatus.NOT_ACCEPTABLE, `${name} department already exists!`);
+        }
     }
 );
 
