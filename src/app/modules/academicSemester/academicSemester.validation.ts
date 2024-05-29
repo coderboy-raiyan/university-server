@@ -21,6 +21,7 @@ const updateAcademicSemesterValidationSchema = z.object({
         })
         .refine((data) => (data.code && data.name) || (!data.name && !data.code), {
             message: 'Both name and code is required',
+            path: ['code', 'name'],
         }),
 });
 
