@@ -1,7 +1,9 @@
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import ApiError from '../../errors/ApiError';
+import transformNonPrimitiveObjectToPrimitive from '../../utils/transformNonPrimitiveObjectToPrimitive';
 import User from '../user/user.model';
+import { TStudent } from './student.interface';
 import Student from './student.model';
 
 const getAllStudentsFromDB = async () => {
@@ -17,7 +19,7 @@ const getAllStudentsFromDB = async () => {
 };
 
 const getSingleStudentsFromDB = async (id: string) => {
-    const result = await Student.findOne({ _id: id })
+    const result = await Student.findOne({ id })
         .populate('admissionSemester')
         .populate({
             path: 'academicDepartment',
@@ -25,6 +27,19 @@ const getSingleStudentsFromDB = async (id: string) => {
                 path: 'academicFaculty',
             },
         });
+    return result;
+};
+
+const updateStudentFromDB = async (studentId: string, payload: Partial<TStudent>) => {
+    const { name, guardian, localGuardian, ...restObject } = payload;
+
+    const modifiedObject = transformNonPrimitiveObjectToPrimitive<TStudent>(restObject, {
+        name,
+        guardian,
+        localGuardian,
+    });
+
+    const result = await Student.findOneAndUpdate({ id: studentId }, modifiedObject, { new: true });
     return result;
 };
 
@@ -72,4 +87,5 @@ export const StudentServices = {
     getAllStudentsFromDB,
     getSingleStudentsFromDB,
     deleteStudentFromDB,
+    updateStudentFromDB,
 };
