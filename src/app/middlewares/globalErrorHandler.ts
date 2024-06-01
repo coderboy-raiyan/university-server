@@ -6,6 +6,7 @@ import httpStatus from 'http-status';
 import { ZodError } from 'zod';
 import { config } from '../config';
 import ApiError from '../errors/ApiError';
+import handleMongooseValidationError from '../errors/handleMongooseValidationError';
 import handleZodError from '../errors/handleZodError';
 import { TErrorSources } from '../interface/error';
 
@@ -21,6 +22,11 @@ function globalErrorHandler(error: any, req: Request, res: Response, next: NextF
 
     if (error instanceof ZodError) {
         const modifiedError = handleZodError(error);
+        message = modifiedError.message;
+        statusCode = modifiedError.statusCode;
+        errorSources = modifiedError.errorSources;
+    } else if (error?.name === 'ValidationError') {
+        const modifiedError = handleMongooseValidationError(error);
         message = modifiedError.message;
         statusCode = modifiedError.statusCode;
         errorSources = modifiedError.errorSources;

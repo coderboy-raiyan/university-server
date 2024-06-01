@@ -3,7 +3,7 @@ import { ZodError } from 'zod';
 import { TErrorSources, TGenericErrorResponse } from '../interface/error';
 
 function handleZodError(zodError: ZodError): TGenericErrorResponse {
-    const error: TErrorSources = zodError.issues.map((err) => {
+    const errorSources: TErrorSources = zodError.issues.map((err) => {
         return {
             path: err.path[err.path.length - 1],
             message: err.message,
@@ -13,7 +13,7 @@ function handleZodError(zodError: ZodError): TGenericErrorResponse {
     return {
         statusCode: httpStatus.NOT_ACCEPTABLE,
         message: 'Validation error',
-        errorSources: error,
+        errorSources,
     };
 }
 
