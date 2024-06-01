@@ -6,6 +6,8 @@ import httpStatus from 'http-status';
 import { ZodError } from 'zod';
 import { config } from '../config';
 import ApiError from '../errors/ApiError';
+import handleDuplicateError from '../errors/handleDuplicateError';
+import handleMongooseCastError from '../errors/handleMongooseCastError';
 import handleMongooseValidationError from '../errors/handleMongooseValidationError';
 import handleZodError from '../errors/handleZodError';
 import { TErrorSources } from '../interface/error';
@@ -27,6 +29,16 @@ function globalErrorHandler(error: any, req: Request, res: Response, next: NextF
         errorSources = modifiedError.errorSources;
     } else if (error?.name === 'ValidationError') {
         const modifiedError = handleMongooseValidationError(error);
+        message = modifiedError.message;
+        statusCode = modifiedError.statusCode;
+        errorSources = modifiedError.errorSources;
+    } else if (error?.name === 'CastError') {
+        const modifiedError = handleMongooseCastError(error);
+        message = modifiedError.message;
+        statusCode = modifiedError.statusCode;
+        errorSources = modifiedError.errorSources;
+    } else if (error?.code === 11000) {
+        const modifiedError = handleDuplicateError(error);
         message = modifiedError.message;
         statusCode = modifiedError.statusCode;
         errorSources = modifiedError.errorSources;
