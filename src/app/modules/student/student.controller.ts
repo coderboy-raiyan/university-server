@@ -5,7 +5,7 @@ import { TStudent } from './student.interface';
 import { StudentServices } from './student.service';
 
 const getAllStudents = catchAsync(async (req, res) => {
-    const result = await StudentServices.getAllStudentsFromDB();
+    const result = await StudentServices.getAllStudentsFromDB(req.query);
     return sendResponse<TStudent[]>(res, {
         statusCode: httpStatus.OK,
         success: true,

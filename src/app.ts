@@ -9,7 +9,7 @@ const app: Application = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/api/v1/test', async (req, res) => {
+app.get('/', (req, res) => {
     res.status(httpStatus.OK).json({ success: true, message: 'Server is healthy' });
 });
 

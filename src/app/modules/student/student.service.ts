@@ -1,20 +1,27 @@
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
+import QueryBuilder from '../../builder/QueryBuilder';
 import ApiError from '../../errors/ApiError';
 import transformNonPrimitiveObjectToPrimitive from '../../utils/transformNonPrimitiveObjectToPrimitive';
 import User from '../user/user.model';
+import StudentConstant from './student.constant';
 import { TStudent } from './student.interface';
 import Student from './student.model';
 
-const getAllStudentsFromDB = async () => {
-    const result = await Student.find({})
-        .populate('admissionSemester')
-        .populate({
-            path: 'academicDepartment',
-            populate: {
-                path: 'academicFaculty',
-            },
-        });
+const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
+    const studentQuery = new QueryBuilder<TStudent>(Student.find({}), query)
+        .search(StudentConstant.StudentSearchAbleFields)
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+
+    const result = await studentQuery.ModelQuery.populate('admissionSemester').populate({
+        path: 'academicDepartment',
+        populate: {
+            path: 'academicFaculty',
+        },
+    });
     return result;
 };
 
