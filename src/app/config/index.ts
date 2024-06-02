@@ -8,5 +8,6 @@ export const config = {
     NODE_ENV: process.env.NODE_ENV as 'development' | 'production',
     DB_URI: process.env.DB_URI,
     STUDENT_DEFAULT_PASSWORD: process.env.STUDENT_DEFAULT_PASSWORD,
+    FACULTY_DEFAULT_PASSWORD: process.env.FACULTY_DEFAULT_PASSWORD,
     BCRYPT_SALT_ROUNDS: process.env.BCRYPT_SALT_ROUNDS,
 };
