@@ -18,4 +18,6 @@ router.post(
     AcademicDepartmentController.createAcademicDepartment
 );
 
-export const AcademicDepartmentRoutes = router;
+const AcademicDepartmentRoutes = router;
+
+export default AcademicDepartmentRoutes;

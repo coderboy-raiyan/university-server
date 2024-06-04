@@ -14,4 +14,6 @@ router.patch(
 );
 router.delete('/:id', StudentControllers.deleteStudent);
 
-export const StudentRoutes = router;
+const StudentRoutes = router;
+
+export default StudentRoutes;

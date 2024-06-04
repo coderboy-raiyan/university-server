@@ -27,4 +27,6 @@ router.post(
     AdminController.createAdmin
 );
 
-export const UserRoutes = router;
+const UserRoutes = router;
+
+export default UserRoutes;
