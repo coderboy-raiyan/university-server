@@ -69,7 +69,7 @@ const getAllAdminsFromDB = async (query: Record<string, unknown>) => {
     return result;
 };
 const getSingleAdminFromDB = async (id: string) => {
-    const result = await Admin.findOne({ id }).populate({
+    const result = await Admin.findOne({ _id: id }).populate({
         path: 'managementDepartment',
         populate: {
             path: 'academicFaculty',
@@ -83,7 +83,7 @@ const updateAdminToDB = async (id: string, payload: TAdmin) => {
     const convertNonPrimitiveToPrimitive = transformNonPrimitiveObjectToPrimitive<TAdmin>(restObj, {
         name,
     });
-    const result = await Admin.findOneAndUpdate({ id }, convertNonPrimitiveToPrimitive, {
+    const result = await Admin.findOneAndUpdate({ _id: id }, convertNonPrimitiveToPrimitive, {
         new: true,
     });
     if (!result) {
@@ -93,17 +93,45 @@ const updateAdminToDB = async (id: string, payload: TAdmin) => {
 };
 
 const deleteAdminFromDB = async (id: string) => {
-    const result = await Admin.findOneAndUpdate(
-        { id },
-        { isDeleted: true },
-        {
-            new: true,
+    const session = await mongoose.startSession();
+    try {
+        session.startTransaction();
+
+        const deletedAdmin = await Admin.findOneAndUpdate(
+            { _id: id },
+            { isDeleted: true },
+            {
+                new: true,
+                session,
+            }
+        );
+
+        if (!deletedAdmin) {
+            throw new ApiError(httpStatus.NOT_FOUND, 'Admin to deleted faculty');
         }
-    );
-    if (!result) {
-        throw new ApiError(httpStatus.NOT_FOUND, 'Admin not found!');
+
+        const deletedUser = await User.findOneAndUpdate(
+            { id: deletedAdmin?.id },
+            { isDeleted: true },
+            {
+                new: true,
+                session,
+            }
+        );
+
+        if (!deletedUser) {
+            throw new ApiError(httpStatus.NOT_FOUND, 'Failed to delete faculty');
+        }
+
+        await session.commitTransaction();
+        await session.endSession();
+
+        return deletedAdmin;
+    } catch (error) {
+        await session.abortTransaction();
+        await session.endSession();
+        throw new Error(error);
     }
-    return result;
 };
 
 const AdminService = {

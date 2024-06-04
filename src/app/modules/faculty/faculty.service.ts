@@ -103,7 +103,7 @@ const deleteFacultyFromDB = async (id: string) => {
         );
 
         if (!deletedFaculty) {
-            throw new ApiError(httpStatus.NOT_FOUND, 'Failed to delete faculty');
+            throw new ApiError(httpStatus.NOT_FOUND, 'Failed to deleted faculty');
         }
 
         const deletedUser = await User.findOneAndUpdate(
@@ -116,7 +116,7 @@ const deleteFacultyFromDB = async (id: string) => {
         );
 
         if (!deletedUser) {
-            throw new ApiError(httpStatus.NOT_FOUND, 'Failed to delete faculty');
+            throw new ApiError(httpStatus.NOT_FOUND, 'Failed to deleted faculty');
         }
 
         await session.commitTransaction();

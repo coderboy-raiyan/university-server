@@ -6,13 +6,13 @@ import AdminValidation from './admin.validation';
 const router = Router();
 
 router.get('/', AdminController.getAllAdmins);
-router.get('/:adminId', AdminController.getSingleAdmin);
+router.get('/:id', AdminController.getSingleAdmin);
 router.patch(
-    '/:adminId',
+    '/:id',
     validateRequest(AdminValidation.updateAdminValidationSchema),
     AdminController.updateAdmin
 );
-router.delete('/:adminId', AdminController.deleteAdmin);
+router.delete('/:id', AdminController.deleteAdmin);
 
 const AdminRoutes = router;
 
