@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import validateRequest from '../../middlewares/validateRequest';
-import AdminController from '../admin/admin.controller';
-import AdminValidation from '../admin/admin.validation';
-import FacultyController from '../faculty/faculty.controller';
-import FacultyValidation from '../faculty/faculty.validation';
+import AdminControllers from '../admin/admin.controller';
+import AdminValidations from '../admin/admin.validation';
+import FacultyControllers from '../faculty/faculty.controller';
+import FacultyValidations from '../faculty/faculty.validation';
 import UserControllers from './user.controller';
 import UserValidations from './user.validation';
 
@@ -17,14 +17,14 @@ router.post(
 
 router.post(
     '/create-faculty',
-    validateRequest(FacultyValidation.createFacultyValidationSchema),
-    FacultyController.createFaculty
+    validateRequest(FacultyValidations.createFacultyValidationSchema),
+    FacultyControllers.createFaculty
 );
 
 router.post(
     '/create-admin',
-    validateRequest(AdminValidation.createAdminValidationSchema),
-    AdminController.createAdmin
+    validateRequest(AdminValidations.createAdminValidationSchema),
+    AdminControllers.createAdmin
 );
 
 const UserRoutes = router;

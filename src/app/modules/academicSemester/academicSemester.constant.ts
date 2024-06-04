@@ -30,11 +30,11 @@ const SemesterAndCodeMapper: TAcademicSemesterAndCodeMapperType = {
     Fall: '03',
 };
 
-const AcademicSemesterConstant = {
+const AcademicSemesterConstants = {
     SemesterName,
     SemesterCode,
     Months,
     SemesterAndCodeMapper,
 };
 
-export default AcademicSemesterConstant;
+export default AcademicSemesterConstants;

@@ -2,10 +2,10 @@ import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { TAcademicSemester } from './academicSemester.interface';
-import AcademicSemesterService from './academicSemester.service';
+import AcademicSemesterServices from './academicSemester.service';
 
 const createAcademicSemester = catchAsync(async (req, res) => {
-    const result = await AcademicSemesterService.createAcademicSemesterToDB(req.body);
+    const result = await AcademicSemesterServices.createAcademicSemesterToDB(req.body);
     sendResponse<TAcademicSemester>(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -14,7 +14,7 @@ const createAcademicSemester = catchAsync(async (req, res) => {
     });
 });
 const getAllAcademicSemesters = catchAsync(async (req, res) => {
-    const result = await AcademicSemesterService.getAllAcademicSemestersFromDB();
+    const result = await AcademicSemesterServices.getAllAcademicSemestersFromDB();
     sendResponse<TAcademicSemester[]>(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -24,7 +24,7 @@ const getAllAcademicSemesters = catchAsync(async (req, res) => {
 });
 const getSingleAcademicSemester = catchAsync(async (req, res) => {
     const { semesterId } = req.params;
-    const result = await AcademicSemesterService.getSingleAcademicSemesterFromDB(semesterId);
+    const result = await AcademicSemesterServices.getSingleAcademicSemesterFromDB(semesterId);
     sendResponse<TAcademicSemester>(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -34,7 +34,7 @@ const getSingleAcademicSemester = catchAsync(async (req, res) => {
 });
 const updateAcademicSemester = catchAsync(async (req, res) => {
     const { semesterId } = req.params;
-    const result = await AcademicSemesterService.updateAcademicSemesterToDB(semesterId, req.body);
+    const result = await AcademicSemesterServices.updateAcademicSemesterToDB(semesterId, req.body);
     sendResponse<TAcademicSemester>(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -43,11 +43,11 @@ const updateAcademicSemester = catchAsync(async (req, res) => {
     });
 });
 
-const AcademicSemesterController = {
+const AcademicSemesterControllers = {
     createAcademicSemester,
     getAllAcademicSemesters,
     getSingleAcademicSemester,
     updateAcademicSemester,
 };
 
-export default AcademicSemesterController;
+export default AcademicSemesterControllers;

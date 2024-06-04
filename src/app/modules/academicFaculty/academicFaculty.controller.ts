@@ -2,10 +2,10 @@ import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { TAcademicFaculty } from './academicFaculty.interface';
-import { AcademicFacultyService } from './academicFaculty.service';
+import { AcademicFacultyServices } from './academicFaculty.service';
 
 const createAcademicFaculty = catchAsync(async (req, res) => {
-    const result = await AcademicFacultyService.createAcademicFacultyFromDB(req.body);
+    const result = await AcademicFacultyServices.createAcademicFacultyFromDB(req.body);
     return sendResponse<TAcademicFaculty>(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -14,7 +14,7 @@ const createAcademicFaculty = catchAsync(async (req, res) => {
     });
 });
 const getAllAcademicFaculties = catchAsync(async (req, res) => {
-    const result = await AcademicFacultyService.getAllAcademicFacultiesFromDB();
+    const result = await AcademicFacultyServices.getAllAcademicFacultiesFromDB();
     return sendResponse<TAcademicFaculty[]>(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -25,7 +25,7 @@ const getAllAcademicFaculties = catchAsync(async (req, res) => {
 
 const getSingleAcademicFaculty = catchAsync(async (req, res) => {
     const { id } = req.params;
-    const result = await AcademicFacultyService.getSingleAcademicFaultyFromDB(id);
+    const result = await AcademicFacultyServices.getSingleAcademicFaultyFromDB(id);
     return sendResponse<TAcademicFaculty>(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -35,7 +35,7 @@ const getSingleAcademicFaculty = catchAsync(async (req, res) => {
 });
 const updateAcademicFaculty = catchAsync(async (req, res) => {
     const { id } = req.params;
-    const result = await AcademicFacultyService.updateAcademicFacultyToDB(id, req.body);
+    const result = await AcademicFacultyServices.updateAcademicFacultyToDB(id, req.body);
     return sendResponse<TAcademicFaculty>(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -44,7 +44,7 @@ const updateAcademicFaculty = catchAsync(async (req, res) => {
     });
 });
 
-export const AcademicFacultyController = {
+export const AcademicFacultyControllers = {
     getAllAcademicFaculties,
     getSingleAcademicFaculty,
     updateAcademicFaculty,

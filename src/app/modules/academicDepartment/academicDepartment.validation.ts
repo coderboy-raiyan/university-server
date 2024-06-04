@@ -15,9 +15,9 @@ const updateAcademicDepartmentValidationSchema = z.object({
     }),
 });
 
-const AcademicDepartmentValidation = {
+const AcademicDepartmentValidations = {
     createAcademicDepartmentValidationSchema,
     updateAcademicDepartmentValidationSchema,
 };
 
-export default AcademicDepartmentValidation;
+export default AcademicDepartmentValidations;

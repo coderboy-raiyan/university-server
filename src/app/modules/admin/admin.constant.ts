@@ -1,9 +1,9 @@
 const Gender = ['male', 'female'] as const;
 
 const AdminSearchAbleFields = ['name.firstName', 'email', 'presentAddress'];
-const AdminConstant = {
+const AdminConstants = {
     Gender,
     AdminSearchAbleFields,
 };
 
-export default AdminConstant;
+export default AdminConstants;

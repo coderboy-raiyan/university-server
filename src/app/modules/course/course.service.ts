@@ -26,11 +26,11 @@ const deleteCourseFromDB = async (id: string) => {
     return result;
 };
 
-const CourseService = {
+const CourseServices = {
     createCourseInToDB,
     getAllCoursesFromDB,
     getSingleCourseFromDB,
     deleteCourseFromDB,
 };
 
-export default CourseService;
+export default CourseServices;

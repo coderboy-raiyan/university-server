@@ -1,9 +1,9 @@
 const Gender = ['male', 'female'] as const;
 
 const FacultySearchAbleFields = ['name.firstName', 'email', 'presentAddress'];
-const FacultyConstant = {
+const FacultyConstants = {
     Gender,
     FacultySearchAbleFields,
 };
 
-export default FacultyConstant;
+export default FacultyConstants;

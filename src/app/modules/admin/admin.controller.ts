@@ -2,10 +2,10 @@ import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { TAdmin } from './admin.interface';
-import AdminService from './admin.service';
+import AdminServices from './admin.service';
 
 const createAdmin = catchAsync(async (req, res) => {
-    const result = await AdminService.createAdminInDB(req.body);
+    const result = await AdminServices.createAdminInDB(req.body);
     sendResponse<TAdmin>(res, {
         statusCode: httpStatus.OK,
         message: 'Admin created successfully',
@@ -15,7 +15,7 @@ const createAdmin = catchAsync(async (req, res) => {
 });
 
 const getAllAdmins = catchAsync(async (req, res) => {
-    const result = await AdminService.getAllAdminsFromDB(req.query);
+    const result = await AdminServices.getAllAdminsFromDB(req.query);
     sendResponse<TAdmin[]>(res, {
         statusCode: httpStatus.OK,
         message: 'Admins retrieved successfully',
@@ -25,7 +25,7 @@ const getAllAdmins = catchAsync(async (req, res) => {
 });
 const getSingleAdmin = catchAsync(async (req, res) => {
     const { id } = req.params;
-    const result = await AdminService.getSingleAdminFromDB(id);
+    const result = await AdminServices.getSingleAdminFromDB(id);
     sendResponse<TAdmin>(res, {
         statusCode: httpStatus.OK,
         message: 'Admin retrieved successfully',
@@ -35,7 +35,7 @@ const getSingleAdmin = catchAsync(async (req, res) => {
 });
 const updateAdmin = catchAsync(async (req, res) => {
     const { id } = req.params;
-    const result = await AdminService.updateAdminToDB(id, req.body);
+    const result = await AdminServices.updateAdminToDB(id, req.body);
     sendResponse<TAdmin>(res, {
         statusCode: httpStatus.OK,
         message: 'Admin updated successfully',
@@ -45,7 +45,7 @@ const updateAdmin = catchAsync(async (req, res) => {
 });
 const deleteAdmin = catchAsync(async (req, res) => {
     const { id } = req.params;
-    const result = await AdminService.deleteAdminFromDB(id);
+    const result = await AdminServices.deleteAdminFromDB(id);
     sendResponse<TAdmin>(res, {
         statusCode: httpStatus.OK,
         message: 'Admin deleted successfully',
@@ -54,7 +54,7 @@ const deleteAdmin = catchAsync(async (req, res) => {
     });
 });
 
-const AdminController = {
+const AdminControllers = {
     getAllAdmins,
     getSingleAdmin,
     createAdmin,
@@ -62,4 +62,4 @@ const AdminController = {
     deleteAdmin,
 };
 
-export default AdminController;
+export default AdminControllers;

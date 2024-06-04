@@ -28,9 +28,9 @@ const updateCourseValidationSchema = z.object({
     }),
 });
 
-const CourseValidation = {
+const CourseValidations = {
     createCourseValidationSchema,
     updateCourseValidationSchema,
 };
 
-export default CourseValidation;
+export default CourseValidations;

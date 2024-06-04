@@ -3,10 +3,10 @@ import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { TCourse } from './course.interface';
-import CourseService from './course.service';
+import CourseServices from './course.service';
 
 const createCourse = catchAsync(async (req: Request, res: Response) => {
-    const result = await CourseService.createCourseInToDB(req.body);
+    const result = await CourseServices.createCourseInToDB(req.body);
 
     sendResponse<TCourse>(res, {
         success: true,
@@ -16,7 +16,7 @@ const createCourse = catchAsync(async (req: Request, res: Response) => {
     });
 });
 const getAllCourses = catchAsync(async (req: Request, res: Response) => {
-    const result = await CourseService.getAllCoursesFromDB();
+    const result = await CourseServices.getAllCoursesFromDB();
 
     sendResponse<TCourse[]>(res, {
         success: true,
@@ -26,7 +26,7 @@ const getAllCourses = catchAsync(async (req: Request, res: Response) => {
     });
 });
 const getSingleCourse = catchAsync(async (req: Request, res: Response) => {
-    const result = await CourseService.getSingleCourseFromDB(req.params.id);
+    const result = await CourseServices.getSingleCourseFromDB(req.params.id);
 
     sendResponse<TCourse>(res, {
         success: true,
@@ -36,7 +36,7 @@ const getSingleCourse = catchAsync(async (req: Request, res: Response) => {
     });
 });
 const deleteCourse = catchAsync(async (req: Request, res: Response) => {
-    const result = await CourseService.deleteCourseFromDB(req.params.id);
+    const result = await CourseServices.deleteCourseFromDB(req.params.id);
 
     sendResponse<TCourse>(res, {
         success: true,
@@ -46,11 +46,11 @@ const deleteCourse = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-const CourseController = {
+const CourseControllers = {
     createCourse,
     getAllCourses,
     getSingleCourse,
     deleteCourse,
 };
 
-export default CourseController;
+export default CourseControllers;

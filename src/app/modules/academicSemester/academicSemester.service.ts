@@ -1,17 +1,17 @@
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import ApiError from '../../errors/ApiError';
-import AcademicSemesterConstant from './academicSemester.constant';
+import AcademicSemesterConstants from './academicSemester.constant';
 import { TAcademicSemester } from './academicSemester.interface';
 import AcademicSemester from './academicSemester.model';
 
 const createAcademicSemesterToDB = async (
     semester: TAcademicSemester
 ): Promise<TAcademicSemester> => {
-    if (AcademicSemesterConstant.SemesterAndCodeMapper[semester.name] !== semester.code) {
+    if (AcademicSemesterConstants.SemesterAndCodeMapper[semester.name] !== semester.code) {
         throw new ApiError(
             httpStatus.NOT_ACCEPTABLE,
-            `Semester '${semester.name}' didn't match with code ${semester.code}. Did you mean code ${AcademicSemesterConstant.SemesterAndCodeMapper[semester.name]}`
+            `Semester '${semester.name}' didn't match with code ${semester.code}. Did you mean code ${AcademicSemesterConstants.SemesterAndCodeMapper[semester.name]}`
         );
     }
     const isSemesterExistsWithSameYear =
@@ -55,10 +55,10 @@ const updateAcademicSemesterToDB = async (
         const isSemesterExistsWithSameYear =
             await AcademicSemester.isSemesterExistsInTheSameYear(payload);
 
-        if (AcademicSemesterConstant.SemesterAndCodeMapper[payload.name] !== payload.code) {
+        if (AcademicSemesterConstants.SemesterAndCodeMapper[payload.name] !== payload.code) {
             throw new ApiError(
                 httpStatus.NOT_ACCEPTABLE,
-                `Semester '${payload.name}' didn't match with code ${payload.code}. Did you mean code ${AcademicSemesterConstant.SemesterAndCodeMapper[payload.name]}`
+                `Semester '${payload.name}' didn't match with code ${payload.code}. Did you mean code ${AcademicSemesterConstants.SemesterAndCodeMapper[payload.name]}`
             );
         }
 
@@ -77,11 +77,11 @@ const updateAcademicSemesterToDB = async (
     return result;
 };
 
-const AcademicSemesterService = {
+const AcademicSemesterServices = {
     createAcademicSemesterToDB,
     getAllAcademicSemestersFromDB,
     getSingleAcademicSemesterFromDB,
     updateAcademicSemesterToDB,
 };
 
-export default AcademicSemesterService;
+export default AcademicSemesterServices;

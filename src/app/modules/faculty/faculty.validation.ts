@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { passwordValidation } from '../user/user.validation';
-import FacultyConstant from './faculty.constant';
+import FacultyConstants from './faculty.constant';
 
 const createFacultyNameValidationSchema = z.object({
     firstName: z.string().max(30),
@@ -26,7 +26,7 @@ const createFacultyValidationSchema = z.object({
         faculty: z.object({
             name: createFacultyNameValidationSchema,
             email: z.string().email(),
-            gender: z.enum(FacultyConstant.Gender),
+            gender: z.enum(FacultyConstants.Gender),
             dateOfBirth: z.string().date(),
             designation: z.string(),
             academicFaculty: z.string(),
@@ -42,7 +42,7 @@ const updateFacultyValidationSchema = z.object({
     body: z.object({
         name: updateFacultyNameValidationSchema.optional(),
         email: z.string().email().optional(),
-        gender: z.enum(FacultyConstant.Gender).optional(),
+        gender: z.enum(FacultyConstants.Gender).optional(),
         dateOfBirth: z.string().date().optional(),
         designation: z.string().optional(),
         academicFaculty: z.string().optional(),
@@ -54,9 +54,9 @@ const updateFacultyValidationSchema = z.object({
     }),
 });
 
-const FacultyValidation = {
+const FacultyValidations = {
     createFacultyValidationSchema,
     updateFacultyValidationSchema,
 };
 
-export default FacultyValidation;
+export default FacultyValidations;

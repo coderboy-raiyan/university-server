@@ -5,7 +5,7 @@ import { config } from '../../config';
 import ApiError from '../../errors/ApiError';
 import transformNonPrimitiveObjectToPrimitive from '../../utils/transformNonPrimitiveObjectToPrimitive';
 import User from '../user/user.model';
-import AdminConstant from './admin.constant';
+import AdminConstants from './admin.constant';
 import { TAdmin } from './admin.interface';
 import { default as Admin, default as Faculty } from './admin.model';
 import AdminUtils from './admin.utils';
@@ -53,7 +53,7 @@ const createAdminInDB = async (payload: { password?: string; admin: TAdmin }) =>
 
 const getAllAdminsFromDB = async (query: Record<string, unknown>) => {
     const facultyQuery = new QueryBuilder(Admin.find(), query)
-        .search(AdminConstant.AdminSearchAbleFields)
+        .search(AdminConstants.AdminSearchAbleFields)
         .filter()
         .paginate()
         .sort()
@@ -134,11 +134,11 @@ const deleteAdminFromDB = async (id: string) => {
     }
 };
 
-const AdminService = {
+const AdminServices = {
     getAllAdminsFromDB,
     getSingleAdminFromDB,
     updateAdminToDB,
     deleteAdminFromDB,
     createAdminInDB,
 };
-export default AdminService;
+export default AdminServices;

@@ -40,7 +40,7 @@ const updateAcademicDepartmentToDB = async (id: string, payload: TAcademicDepart
     return result;
 };
 
-export const AcademicDepartmentService = {
+export const AcademicDepartmentServices = {
     createAcademicDepartmentFromDB,
     getAllAcademicDepartmentsFromDB,
     getSingleAcademicDepartmentFromDB,

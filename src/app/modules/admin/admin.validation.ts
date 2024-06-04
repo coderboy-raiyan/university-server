@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { passwordValidation } from '../user/user.validation';
-import AdminConstant from './admin.constant';
+import AdminConstants from './admin.constant';
 
 const createAdminNameValidationSchema = z.object({
     firstName: z.string().max(30),
@@ -26,7 +26,7 @@ const createAdminValidationSchema = z.object({
         admin: z.object({
             name: createAdminNameValidationSchema,
             email: z.string().email(),
-            gender: z.enum(AdminConstant.Gender),
+            gender: z.enum(AdminConstants.Gender),
             dateOfBirth: z.string().date(),
             managementDepartment: z.string(),
             presentAddress: z.string(),
@@ -39,7 +39,7 @@ const updateAdminValidationSchema = z.object({
     body: z.object({
         name: updateAdminNameValidationSchema.optional(),
         email: z.string().email().optional(),
-        gender: z.enum(AdminConstant.Gender).optional(),
+        gender: z.enum(AdminConstants.Gender).optional(),
         dateOfBirth: z.string().date().optional(),
         managementDepartment: z.string().optional(),
         presentAddress: z.string().optional(),
@@ -48,9 +48,9 @@ const updateAdminValidationSchema = z.object({
     }),
 });
 
-const AdminValidation = {
+const AdminValidations = {
     createAdminValidationSchema,
     updateAdminValidationSchema,
 };
 
-export default AdminValidation;
+export default AdminValidations;

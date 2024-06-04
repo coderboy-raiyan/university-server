@@ -5,7 +5,7 @@ import { config } from '../../config';
 import ApiError from '../../errors/ApiError';
 import transformNonPrimitiveObjectToPrimitive from '../../utils/transformNonPrimitiveObjectToPrimitive';
 import User from '../user/user.model';
-import FacultyConstant from './faculty.constant';
+import FacultyConstants from './faculty.constant';
 import { TFaculty } from './faculty.interface';
 import Faculty from './faculty.model';
 import FacultyUtils from './faculty.utils';
@@ -53,7 +53,7 @@ const createFacultyInDB = async (payload: { password?: string; faculty: TFaculty
 
 const getAllFacultiesFromDB = async (query: Record<string, unknown>) => {
     const facultyQuery = new QueryBuilder(Faculty.find(), query)
-        .search(FacultyConstant.FacultySearchAbleFields)
+        .search(FacultyConstants.FacultySearchAbleFields)
         .filter()
         .paginate()
         .sort()
@@ -130,11 +130,11 @@ const deleteFacultyFromDB = async (id: string) => {
     }
 };
 
-const FacultyService = {
+const FacultyServices = {
     getAllFacultiesFromDB,
     getSingleFacultyFromDB,
     updateFacultyToDB,
     deleteFacultyFromDB,
     createFacultyInDB,
 };
-export default FacultyService;
+export default FacultyServices;
