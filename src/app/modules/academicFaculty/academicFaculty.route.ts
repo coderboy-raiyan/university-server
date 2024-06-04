@@ -7,9 +7,9 @@ import AcademicFacultyValidation from './academicFaculty.validation';
 const router = Router();
 
 router.get('/', AcademicFacultyController.getAllAcademicFaculties);
-router.get('/:facultyId', AcademicFacultyController.getSingleAcademicFaculty);
+router.get('/:id', AcademicFacultyController.getSingleAcademicFaculty);
 router.patch(
-    '/:facultyId',
+    '/:id',
     validateRequest(AcademicFacultyValidation.updateAcademicFacultyValidationSchema),
     AcademicFacultyController.updateAcademicFaculty
 );

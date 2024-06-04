@@ -6,13 +6,13 @@ import FacultyValidation from './faculty.validation';
 const router = Router();
 
 router.get('/', FacultyController.getAllFaculties);
-router.get('/:facultyId', FacultyController.getSingleFaculty);
+router.get('/:id', FacultyController.getSingleFaculty);
 router.patch(
-    '/:facultyId',
+    '/:id',
     validateRequest(FacultyValidation.updateFacultyValidationSchema),
     FacultyController.updateFaculty
 );
-router.delete('/:facultyId', FacultyController.deleteFaculty);
+router.delete('/:id', FacultyController.deleteFaculty);
 
 const FacultyRoutes = router;
 

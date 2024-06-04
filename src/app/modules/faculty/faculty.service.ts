@@ -69,7 +69,7 @@ const getAllFacultiesFromDB = async (query: Record<string, unknown>) => {
     return result;
 };
 const getSingleFacultyFromDB = async (id: string) => {
-    const result = await Faculty.findOne({ id });
+    const result = await Faculty.findOne({ _id: id });
     return result;
 };
 
@@ -79,7 +79,7 @@ const updateFacultyToDB = async (id: string, payload: TFaculty) => {
         restObj,
         { name }
     );
-    const result = await Faculty.findOneAndUpdate({ id }, convertNonPrimitiveToPrimitive, {
+    const result = await Faculty.findOneAndUpdate({ _id: id }, convertNonPrimitiveToPrimitive, {
         new: true,
     });
     if (!result) {
@@ -89,17 +89,45 @@ const updateFacultyToDB = async (id: string, payload: TFaculty) => {
 };
 
 const deleteFacultyFromDB = async (id: string) => {
-    const result = await Faculty.findOneAndUpdate(
-        { id },
-        { isDeleted: true },
-        {
-            new: true,
+    const session = await mongoose.startSession();
+    try {
+        session.startTransaction();
+
+        const deletedFaculty = await Faculty.findOneAndUpdate(
+            { _id: id },
+            { isDeleted: true },
+            {
+                new: true,
+                session,
+            }
+        );
+
+        if (!deletedFaculty) {
+            throw new ApiError(httpStatus.NOT_FOUND, 'Failed to delete faculty');
         }
-    );
-    if (!result) {
-        throw new ApiError(httpStatus.NOT_FOUND, 'Faculty not found!');
+
+        const deletedUser = await User.findOneAndUpdate(
+            { id: deletedFaculty?.id },
+            { isDeleted: true },
+            {
+                new: true,
+                session,
+            }
+        );
+
+        if (!deletedUser) {
+            throw new ApiError(httpStatus.NOT_FOUND, 'Failed to delete faculty');
+        }
+
+        await session.commitTransaction();
+        await session.endSession();
+
+        return deletedFaculty;
+    } catch (error) {
+        await session.abortTransaction();
+        await session.endSession();
+        throw new Error(error);
     }
-    return result;
 };
 
 const FacultyService = {

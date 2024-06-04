@@ -26,7 +26,7 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
 };
 
 const getSingleStudentsFromDB = async (id: string) => {
-    const result = await Student.findOne({ id })
+    const result = await Student.findOne({ _id: id })
         .populate('admissionSemester')
         .populate({
             path: 'academicDepartment',
@@ -37,7 +37,7 @@ const getSingleStudentsFromDB = async (id: string) => {
     return result;
 };
 
-const updateStudentFromDB = async (studentId: string, payload: Partial<TStudent>) => {
+const updateStudentFromDB = async (id: string, payload: Partial<TStudent>) => {
     const { name, guardian, localGuardian, ...restObject } = payload;
 
     const modifiedObject = transformNonPrimitiveObjectToPrimitive<TStudent>(restObject, {
@@ -46,17 +46,17 @@ const updateStudentFromDB = async (studentId: string, payload: Partial<TStudent>
         localGuardian,
     });
 
-    const result = await Student.findOneAndUpdate({ id: studentId }, modifiedObject, { new: true });
+    const result = await Student.findOneAndUpdate({ _id: id }, modifiedObject, { new: true });
     return result;
 };
 
-const deleteStudentFromDB = async (studentId: string) => {
+const deleteStudentFromDB = async (id: string) => {
     const session = await mongoose.startSession();
     try {
         session.startTransaction();
 
         const deleteStudent = await Student.findOneAndUpdate(
-            { id: studentId },
+            { _id: id },
             { isDeleted: true },
             { new: true, session }
         );
@@ -65,7 +65,7 @@ const deleteStudentFromDB = async (studentId: string) => {
         }
 
         const deletedUser = await User.findOneAndUpdate(
-            { id: studentId },
+            { id: deleteStudent?.id },
             { isDeleted: true },
             { new: true, session }
         );
