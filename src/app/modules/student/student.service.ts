@@ -4,13 +4,13 @@ import QueryBuilder from '../../builder/QueryBuilder';
 import ApiError from '../../errors/ApiError';
 import transformNonPrimitiveObjectToPrimitive from '../../utils/transformNonPrimitiveObjectToPrimitive';
 import User from '../user/user.model';
-import StudentConstant from './student.constant';
+import StudentConstants from './student.constant';
 import { TStudent } from './student.interface';
 import Student from './student.model';
 
 const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
     const studentQuery = new QueryBuilder<TStudent>(Student.find({}), query)
-        .search(StudentConstant.StudentSearchAbleFields)
+        .search(StudentConstants.StudentSearchAbleFields)
         .filter()
         .sort()
         .paginate()

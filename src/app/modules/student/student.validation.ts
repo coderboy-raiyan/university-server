@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import StudentConstant from './student.constant';
+import StudentConstants from './student.constant';
 
 const createStudentUserNameValidationSchema = z.object({
     firstName: z.string().max(30),
@@ -24,7 +24,7 @@ const createLocalGuardianValidationSchema = z.object({
 const createStudentValidationSchema = z.object({
     name: createStudentUserNameValidationSchema,
     email: z.string().email(),
-    gender: z.enum(StudentConstant.Gender),
+    gender: z.enum(StudentConstants.Gender),
     dateOfBirth: z.string().date(),
     admissionSemester: z.string(),
     academicDepartment: z.string(),
@@ -60,7 +60,7 @@ const updateStudentValidationSchema = z.object({
     body: z.object({
         name: updateStudentUserNameValidationSchema.optional(),
         email: z.string().email().optional(),
-        gender: z.enum(StudentConstant.Gender).optional(),
+        gender: z.enum(StudentConstants.Gender).optional(),
         dateOfBirth: z.string().date().optional(),
         admissionSemester: z.string().optional(),
         academicDepartment: z.string().optional(),
@@ -73,9 +73,9 @@ const updateStudentValidationSchema = z.object({
     }),
 });
 
-const StudentValidation = {
+const StudentValidations = {
     createStudentValidationSchema,
     updateStudentValidationSchema,
 };
 
-export default StudentValidation;
+export default StudentValidations;

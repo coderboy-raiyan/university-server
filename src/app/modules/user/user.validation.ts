@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import StudentValidation from '../student/student.validation';
+import StudentValidations from '../student/student.validation';
 
 // Minimum 6 characters, at least one uppercase letter, one lowercase letter, one number and one special character
 export const passwordValidation = new RegExp(
@@ -16,12 +16,12 @@ const createUserAndStudentValidationSchema = z.object({
                     'Minimum 6 characters, at least one uppercase letter, one lowercase letter, one number and one special character',
             })
             .optional(),
-        student: StudentValidation.createStudentValidationSchema,
+        student: StudentValidations.createStudentValidationSchema,
     }),
 });
 
-const UserValidation = {
+const UserValidations = {
     createUserAndStudentValidationSchema,
 };
 
-export default UserValidation;
+export default UserValidations;

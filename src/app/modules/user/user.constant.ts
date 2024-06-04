@@ -2,9 +2,9 @@ const Role = ['admin', 'student', 'faculty'] as const;
 
 const Status = ['in-progress', 'blocked'] as const;
 
-const UserConstant = {
+const UserConstants = {
     Role,
     Status,
 };
 
-export default UserConstant;
+export default UserConstants;

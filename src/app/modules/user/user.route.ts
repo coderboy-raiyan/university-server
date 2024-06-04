@@ -4,15 +4,15 @@ import AdminController from '../admin/admin.controller';
 import AdminValidation from '../admin/admin.validation';
 import FacultyController from '../faculty/faculty.controller';
 import FacultyValidation from '../faculty/faculty.validation';
-import UserController from './user.controller';
-import UserValidation from './user.validation';
+import UserControllers from './user.controller';
+import UserValidations from './user.validation';
 
 const router = Router();
 
 router.post(
     '/create-student',
-    validateRequest(UserValidation.createUserAndStudentValidationSchema),
-    UserController.createStudent
+    validateRequest(UserValidations.createUserAndStudentValidationSchema),
+    UserControllers.createStudent
 );
 
 router.post(

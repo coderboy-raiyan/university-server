@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { Schema, model } from 'mongoose';
 import { config } from '../../config';
-import UserConstant from './user.constant';
+import UserConstants from './user.constant';
 import { TUser } from './user.interface';
 
 const userSchema = new Schema<TUser>(
@@ -21,7 +21,7 @@ const userSchema = new Schema<TUser>(
         },
         role: {
             type: String,
-            enum: UserConstant.Role,
+            enum: UserConstants.Role,
         },
         isDeleted: {
             type: Boolean,
@@ -29,7 +29,7 @@ const userSchema = new Schema<TUser>(
         },
         status: {
             type: String,
-            enum: UserConstant.Status,
+            enum: UserConstants.Status,
             default: 'in-progress',
         },
     },

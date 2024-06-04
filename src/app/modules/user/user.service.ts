@@ -57,8 +57,8 @@ const createStudentToDB = async (password: string | null, payload: TStudent): Pr
     }
 };
 
-const UserService = {
+const UserServices = {
     createStudentToDB,
 };
 
-export default UserService;
+export default UserServices;
