@@ -10,15 +10,17 @@ class QueryBuilder<T> {
     }
 
     search(searchAbleFields: string[]) {
-        const searchTerm = this.query?.searchTerm || '';
+        const searchTerm = this.query?.searchTerm;
 
-        this.ModelQuery = this.ModelQuery.find({
-            $or: searchAbleFields.map((field) => {
-                return {
-                    [field]: { $regex: searchTerm, $options: 'i' },
-                };
-            }),
-        } as FilterQuery<T>);
+        if (searchTerm) {
+            this.ModelQuery = this.ModelQuery.find({
+                $or: searchAbleFields.map((field) => {
+                    return {
+                        [field]: this.checkSearchTermAndReturnAppropriateRegex(searchTerm),
+                    };
+                }),
+            } as FilterQuery<T>);
+        }
 
         return this;
     }
@@ -52,6 +54,14 @@ class QueryBuilder<T> {
         const fields = (this.query.fields as string)?.split(',')?.join(' ') || '-__v';
         this.ModelQuery = this.ModelQuery.select(fields);
         return this;
+    }
+
+    private checkSearchTermAndReturnAppropriateRegex(searchTerm: unknown) {
+        if (typeof searchTerm === 'number') {
+            return searchTerm;
+        } else if (typeof searchTerm === 'string') {
+            return { $regex: searchTerm, $options: 'i' };
+        }
     }
 }
 
