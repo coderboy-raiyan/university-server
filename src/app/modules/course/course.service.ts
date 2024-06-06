@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 import QueryBuilder from '../../builder/QueryBuilder';
 import ApiError from '../../errors/ApiError';
 import CourseConstants from './course.constant';
-import { TCourse } from './course.interface';
-import Course from './course.model';
+import { TCourse, TCourseFaculty } from './course.interface';
+import Course, { CourseFaculty } from './course.model';
 
 const createCourseInToDB = async (payload: TCourse) => {
     const result = await Course.create(payload);
@@ -110,12 +110,38 @@ const deleteCourseFromDB = async (id: string) => {
     return result;
 };
 
+const assignFacultiesWithCourseIntoDB = async (id: string, payload: Partial<TCourseFaculty>) => {
+    const result = await CourseFaculty.findOneAndUpdate(
+        { course: id },
+        {
+            course: id,
+            $addToSet: { faculties: { $each: payload.faculties } },
+        },
+        { upsert: true, new: true }
+    );
+
+    return result;
+};
+const removeFacultiesFromCourseIntoDB = async (id: string, payload: Partial<TCourseFaculty>) => {
+    const result = await CourseFaculty.findOneAndUpdate(
+        { course: id },
+        {
+            $pull: { faculties: { $in: payload.faculties } },
+        },
+        { new: true }
+    );
+
+    return result;
+};
+
 const CourseServices = {
     createCourseInToDB,
     getAllCoursesFromDB,
     getSingleCourseFromDB,
     deleteCourseFromDB,
     updateCourseIntoDB,
+    assignFacultiesWithCourseIntoDB,
+    removeFacultiesFromCourseIntoDB,
 };
 
 export default CourseServices;
