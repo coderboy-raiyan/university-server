@@ -13,6 +13,11 @@ router.post(
     validateRequest(SemesterRegistrationValidations.createSemesterRegistrationValidationSchema),
     SemesterRegistrationControllers.createSemesterRegistration
 );
+router.patch(
+    '/update-semester-registration/:id',
+    validateRequest(SemesterRegistrationValidations.updateSemesterRegistrationValidationSchema),
+    SemesterRegistrationControllers.updateSemesterRegistration
+);
 
 const SemesterRegistrationRoutes = router;
 
