@@ -1,4 +1,5 @@
 import httpStatus from 'http-status';
+import mongoose from 'mongoose';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { TSemesterRegistrationSemester } from './semesterRegistration.interface';
@@ -49,12 +50,28 @@ const updateSemesterRegistration = catchAsync(async (req, res) => {
         data: result,
     });
 });
+const deleteSemesterRegistration = catchAsync(async (req, res) => {
+    const result = await SemesterRegistrationServices.deleteSemesterRegistrationFromDB(
+        req.params.id
+    );
+
+    sendResponse<{
+        deletedSemester: TSemesterRegistrationSemester;
+        deletedOfferedCourses: mongoose.mongo.DeleteResult;
+    }>(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Semester registration and offered courses deleted successfully',
+        data: result,
+    });
+});
 
 const SemesterRegistrationControllers = {
     createSemesterRegistration,
     getAllSemesterRegistrations,
     getSingleSemesterRegistration,
     updateSemesterRegistration,
+    deleteSemesterRegistration,
 };
 
 export default SemesterRegistrationControllers;

@@ -1,7 +1,9 @@
 import httpStatus from 'http-status';
+import mongoose from 'mongoose';
 import QueryBuilder from '../../builder/QueryBuilder';
 import ApiError from '../../errors/ApiError';
 import AcademicSemester from '../academicSemester/academicSemester.model';
+import OfferedCourse from '../offeredCourse/offeredCourse.model';
 import { SemesterRegistrationStatusEnum } from './semesterRegistration.constant';
 import { TSemesterRegistrationSemester } from './semesterRegistration.interface';
 import SemesterRegistration from './semesterRegistration.model';
@@ -95,11 +97,66 @@ const updateSemesterRegistrationIntoDB = async (
     return result;
 };
 
+const deleteSemesterRegistrationFromDB = async (id: string) => {
+    const isSemesterRegistrationExists = await SemesterRegistration.findById(id);
+
+    if (!isSemesterRegistrationExists) {
+        throw new ApiError(httpStatus.NOT_FOUND, 'Semester registration not found!');
+    }
+    if (isSemesterRegistrationExists.status !== 'UPCOMING') {
+        throw new ApiError(
+            httpStatus.NOT_FOUND,
+            `You can not update this offered course as it is ${isSemesterRegistrationExists.status}`
+        );
+    }
+    const offeredCoursesBelongToThisSemester = await OfferedCourse.find(
+        {
+            semesterRegistration: id,
+        },
+        { _id: 1 }
+    );
+
+    const extractOnlyIdFromOfferedCourses = offeredCoursesBelongToThisSemester.map(
+        (course) => course._id
+    );
+
+    const session = await mongoose.startSession();
+
+    try {
+        session.startTransaction();
+
+        const deletedOfferedCourses = await OfferedCourse.deleteMany(
+            { _id: { $in: extractOnlyIdFromOfferedCourses } },
+            { session }
+        );
+
+        if (!deletedOfferedCourses) {
+            throw new ApiError(httpStatus.NOT_FOUND, `Failed to delete all the offered courses`);
+        }
+
+        const deletedSemester = await SemesterRegistration.findByIdAndDelete(id, { session });
+
+        if (!deletedSemester) {
+            throw new ApiError(httpStatus.NOT_FOUND, `Failed to delete semester registration`);
+        }
+
+        await session.commitTransaction();
+        await session.endSession();
+
+        return { deletedSemester, deletedOfferedCourses };
+    } catch (error) {
+        await session.abortTransaction();
+        await session.endSession();
+        throw new Error(error);
+    }
+};
+
 const SemesterRegistrationServices = {
     createSemesterRegistrationIntoDB,
     getAllSemesterRegistrationsFromDB,
     getSingleSemesterRegistrationFromDB,
     updateSemesterRegistrationIntoDB,
+    deleteSemesterRegistrationFromDB,
 };
 
 export default SemesterRegistrationServices;
