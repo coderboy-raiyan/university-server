@@ -1,11 +1,13 @@
 import jwt from 'jsonwebtoken';
+import { config } from '../config';
 
-const generateJwtToken = (
-    payload: Record<string, unknown>,
-    tokenSecret: string,
-    expiresIn: string = '1d'
-) => {
-    return jwt.sign(payload, tokenSecret, { expiresIn });
+export const generateAccessToken = (payload: Record<string, unknown>) => {
+    return jwt.sign(payload, config.JWT_ACCESS_SECRET, {
+        expiresIn: config.JWT_ACCESS_EXPIRES_IN,
+    });
 };
-
-export default generateJwtToken;
+export const generateRefreshToken = (payload: Record<string, unknown>) => {
+    return jwt.sign(payload, config.JWT_REFRESH_SECRET, {
+        expiresIn: config.JWT_REFRESH_EXPIRES_IN,
+    });
+};

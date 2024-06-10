@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import httpStatus from 'http-status';
 import { config } from '../../config';
 import ApiError from '../../errors/ApiError';
-import generateJwtToken from '../../utils/generateJwtToken';
+import { generateAccessToken, generateRefreshToken } from '../../utils/generateJwtToken';
 import User from '../user/user.model';
 import { TChangePasswordPayload, TLoginUser } from './auth.interface';
 
@@ -25,7 +25,9 @@ const loginUser = async (payload: TLoginUser) => {
         role: user.role,
     };
 
-    const accessToken = generateJwtToken(jwtPayload, config.JWT_ACCESS_TOKEN_SECRET);
+    const accessToken = generateAccessToken(jwtPayload);
+
+    const refreshToken = generateRefreshToken(jwtPayload);
 
     // check password
     const isPasswordMatched = await User.isPasswordMatched(payload.password, user.password);
@@ -34,6 +36,7 @@ const loginUser = async (payload: TLoginUser) => {
     }
     return {
         accessToken,
+        refreshToken,
         needsPasswordChange: user.needsPasswordChange,
     };
 };
