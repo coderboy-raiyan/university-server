@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import { config } from '../../config';
 import ApiError from '../../errors/ApiError';
+import AcademicDepartment from '../academicDepartment/academicDepartment.model';
 import AcademicSemester from '../academicSemester/academicSemester.model';
 import { TStudent } from '../student/student.interface';
 import Student from '../student/student.model';
@@ -15,6 +16,14 @@ const createStudentToDB = async (password: string | null, payload: TStudent): Pr
     }
     const user: Partial<TUser> = {};
     const admissionSemester = await AcademicSemester.findById(payload.admissionSemester);
+    const academicDepartment = await AcademicDepartment.findById(payload.academicDepartment);
+
+    if (!admissionSemester) {
+        throw new ApiError(httpStatus.NOT_FOUND, 'Academic semester not found!');
+    }
+    if (!academicDepartment) {
+        throw new ApiError(httpStatus.NOT_FOUND, 'Academic department not found!');
+    }
 
     const session = await mongoose.startSession();
 

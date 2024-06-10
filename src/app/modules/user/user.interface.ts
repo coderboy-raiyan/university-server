@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { Model } from 'mongoose';
+import UserConstants from './user.constant';
 
 export type TUser = {
     id: string;
@@ -9,6 +10,8 @@ export type TUser = {
     isDeleted?: boolean;
     status?: 'in-progress' | 'blocked';
 };
+
+export type TUserRole = keyof typeof UserConstants.USER_ROLE_ENUM;
 
 export type TUserModel = Model<TUser> & {
     isUserExistsByCustomId(id: string): Promise<TUser>;
