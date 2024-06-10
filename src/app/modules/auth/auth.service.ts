@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import httpStatus from 'http-status';
+import { JwtPayload, verify } from 'jsonwebtoken';
 import { config } from '../../config';
 import ApiError from '../../errors/ApiError';
 import { generateAccessToken, generateRefreshToken } from '../../utils/generateJwtToken';
@@ -60,9 +61,46 @@ const changePasswordInToDB = async (payload: TChangePasswordPayload) => {
     return { id: result.id, role: result.role };
 };
 
+const refreshToken = async (token: string) => {
+    if (!token) {
+        throw new ApiError(httpStatus.UNAUTHORIZED, 'You are not authorized');
+    }
+
+    const decoded = verify(token, config.JWT_REFRESH_SECRET) as JwtPayload;
+
+    const user = await User.isUserExistsByCustomId(decoded.id);
+
+    if (!user) {
+        throw new ApiError(httpStatus.NOT_FOUND, 'User not found!');
+    }
+    if (user.isDeleted) {
+        throw new ApiError(httpStatus.NOT_FOUND, 'This user is deleted!');
+    }
+    if (user.status === 'blocked') {
+        throw new ApiError(httpStatus.FORBIDDEN, 'This user is blocked!');
+    }
+
+    if (
+        user.passwordChangedAt &&
+        User.isJwtIssuedBeforePasswordChanged(user.passwordChangedAt, decoded.iat)
+    ) {
+        throw new ApiError(httpStatus.FORBIDDEN, 'You are not authorized');
+    }
+
+    const jwtPayload = {
+        id: user.id,
+        role: user.role,
+    };
+
+    const accessToken = generateAccessToken(jwtPayload);
+
+    return { accessToken };
+};
+
 const AuthServices = {
     loginUser,
     changePasswordInToDB,
+    refreshToken,
 };
 
 export default AuthServices;

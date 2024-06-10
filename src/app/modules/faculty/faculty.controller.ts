@@ -16,6 +16,9 @@ const createFaculty = catchAsync(async (req, res) => {
 
 const getAllFaculties = catchAsync(async (req, res) => {
     const result = await FacultyServices.getAllFacultiesFromDB(req.query);
+
+    console.log(req.cookies);
+
     sendResponse<TFaculty[]>(res, {
         statusCode: httpStatus.OK,
         message: 'Faculties retrieved successfully',

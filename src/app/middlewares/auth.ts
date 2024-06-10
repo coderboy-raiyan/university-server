@@ -14,7 +14,7 @@ const auth = (...requiredRoles: TUserRole[]) => {
             throw new ApiError(httpStatus.UNAUTHORIZED, 'You are not authorized');
         }
 
-        const decoded = verify(token, config.JWT_ACCESS_TOKEN_SECRET) as JwtPayload;
+        const decoded = verify(token, config.JWT_ACCESS_SECRET) as JwtPayload;
 
         const user = await User.isUserExistsByCustomId(decoded.id);
 
