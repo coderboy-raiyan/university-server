@@ -8,6 +8,7 @@ export type TLoginUser = {
 export type TChangePasswordPayload = {
     id: string;
     role: TUserRole;
+    password: string;
     oldPassword: string;
     newPassword: string;
 };

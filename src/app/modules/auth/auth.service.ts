@@ -39,20 +39,10 @@ const loginUser = async (payload: TLoginUser) => {
 };
 
 const changePasswordInToDB = async (payload: TChangePasswordPayload) => {
-    const { id, role, newPassword, oldPassword } = payload;
-    const isUserExists = await User.isUserExistsByCustomId(id);
+    const { id, role, newPassword, oldPassword, password } = payload;
 
-    if (!isUserExists) {
-        throw new ApiError(httpStatus.NOT_FOUND, 'User not found!');
-    }
-    if (isUserExists.isDeleted) {
-        throw new ApiError(httpStatus.NOT_FOUND, 'This user is deleted!');
-    }
-    if (isUserExists.status === 'blocked') {
-        throw new ApiError(httpStatus.FORBIDDEN, 'This user is blocked!');
-    }
     // check password
-    const isPasswordMatched = await User.isPasswordMatched(oldPassword, isUserExists.password);
+    const isPasswordMatched = await User.isPasswordMatched(oldPassword, password);
     if (!isPasswordMatched) {
         throw new ApiError(httpStatus.FORBIDDEN, 'Old password did not matched');
     }

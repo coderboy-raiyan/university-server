@@ -60,6 +60,13 @@ userSchema.statics.isPasswordMatched = async function (plainText: string, hashPa
     const isMatched = await bcrypt.compare(plainText, hashPass);
     return isMatched;
 };
+userSchema.statics.isJwtIssuedBeforePasswordChanged = function (
+    passwordChangedTimeStamp: Date | number,
+    jwtIssuedTimeStamp: number
+) {
+    passwordChangedTimeStamp = Math.round(new Date(passwordChangedTimeStamp).getTime() / 1000);
+    return passwordChangedTimeStamp > jwtIssuedTimeStamp;
+};
 
 const User = model<TUser, TUserModel>('User', userSchema);
 
