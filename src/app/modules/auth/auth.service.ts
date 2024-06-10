@@ -1,13 +1,15 @@
+import bcrypt from 'bcrypt';
 import httpStatus from 'http-status';
 import { config } from '../../config';
 import ApiError from '../../errors/ApiError';
 import generateJwtToken from '../../utils/generateJwtToken';
 import User from '../user/user.model';
-import { TLoginUser } from './auth.interface';
+import { TChangePasswordPayload, TLoginUser } from './auth.interface';
 
 const loginUser = async (payload: TLoginUser) => {
     // if user exists
     const user = await User.isUserExistsByCustomId(payload.id);
+
     if (!user) {
         throw new ApiError(httpStatus.NOT_FOUND, 'User not found!');
     }
@@ -36,8 +38,38 @@ const loginUser = async (payload: TLoginUser) => {
     };
 };
 
+const changePasswordInToDB = async (payload: TChangePasswordPayload) => {
+    const { id, role, newPassword, oldPassword } = payload;
+    const isUserExists = await User.isUserExistsByCustomId(id);
+
+    if (!isUserExists) {
+        throw new ApiError(httpStatus.NOT_FOUND, 'User not found!');
+    }
+    if (isUserExists.isDeleted) {
+        throw new ApiError(httpStatus.NOT_FOUND, 'This user is deleted!');
+    }
+    if (isUserExists.status === 'blocked') {
+        throw new ApiError(httpStatus.FORBIDDEN, 'This user is blocked!');
+    }
+    // check password
+    const isPasswordMatched = await User.isPasswordMatched(oldPassword, isUserExists.password);
+    if (!isPasswordMatched) {
+        throw new ApiError(httpStatus.FORBIDDEN, 'Old password did not matched');
+    }
+
+    const newHashedPassword = await bcrypt.hash(newPassword, parseInt(config.BCRYPT_SALT_ROUNDS));
+
+    const result = await User.findOneAndUpdate(
+        { id, role },
+        { password: newHashedPassword, needsPasswordChange: false, passwordChangedAt: new Date() }
+    );
+
+    return { id: result.id, role: result.role };
+};
+
 const AuthServices = {
     loginUser,
+    changePasswordInToDB,
 };
 
 export default AuthServices;

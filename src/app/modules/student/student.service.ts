@@ -16,17 +16,20 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
         .paginate()
         .fields();
 
-    const result = await studentQuery.ModelQuery.populate('admissionSemester').populate({
-        path: 'academicDepartment',
-        populate: {
-            path: 'academicFaculty',
-        },
-    });
+    const result = await studentQuery.ModelQuery.populate('user')
+        .populate('admissionSemester')
+        .populate({
+            path: 'academicDepartment',
+            populate: {
+                path: 'academicFaculty',
+            },
+        });
     return result;
 };
 
 const getSingleStudentsFromDB = async (id: string) => {
     const result = await Student.findOne({ _id: id })
+        .populate('user')
         .populate('admissionSemester')
         .populate({
             path: 'academicDepartment',
